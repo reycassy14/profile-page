@@ -1,6 +1,6 @@
 <template>
     <div class="header flex flex-col justify-center items-center px-[30px]">
-        <div class="header-wrapper grid grid-flow-col grid-rows-3 gap-[30px]">
+        <div class="header-wrapper grid grid-flow-col grid-rows-2 gap-[30px]">
             <div class="image row-span-3 w-full h-auto lg:h-[270px] rounded-[20px] mx-auto">
                 <img :src="avatar" class="rounded-[20px] w-full h-full" alt="">
             </div>
