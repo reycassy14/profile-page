@@ -1,11 +1,25 @@
-<script setup></script>
-
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <div class="">
+    <router-view></router-view>
+     <!-- <main-view></main-view> -->
+  </div>
 </template>
+
+<script>
+//import MainView from '../src/views/MainView.vue';
+export default {
+  components: {
+  //  MainView,
+  },
+  data() {
+    return {
+      isMobile: false,
+    };
+  },
+  mounted() {
+    this.isMobile = window.innerWidth < 768;
+  },
+};
+</script>
 
 <style scoped></style>

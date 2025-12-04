@@ -1,5 +1,7 @@
 <template>
+  <div class="dark min-h-screen w-full bg-background text-foreground">
     <router-view></router-view>
+  </div>
 </template>
 
 <script>

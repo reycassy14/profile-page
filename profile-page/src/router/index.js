@@ -3,6 +3,7 @@ import MainView from '@/views/MainView.vue';
 import ErrorView from '@/views/ErrorView.vue';
 
 import MainPage from '@/pages/MainPage.vue';
+import ShadcnDemo from '@/pages/ShadcnDemo.vue';
 
 
 
@@ -15,6 +16,11 @@ const routes = [
       {
         path: '',
         component: MainPage
+      },
+      {
+        path: '/shadcn-demo',
+        alias: '/shadcn-demo',
+        component: ShadcnDemo
       }
     ],
   },
