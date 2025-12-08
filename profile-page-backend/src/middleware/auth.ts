@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { StatusCodes } from 'http-status-codes'
 import jwt from 'jsonwebtoken';
 
 interface JWTPayload {
@@ -27,7 +28,7 @@ export const authenticateToken = (
 
     // 2. Check if token exists
     if (!token) {
-      res.status(401).json({ 
+      res.status(StatusCodes.UNAUTHORIZED).json({ 
         success: false,
         message: 'Access token is required' 
       });
@@ -49,14 +50,14 @@ export const authenticateToken = (
   } catch (error: any) {
     // Token invalid, expired, or wrong secret
     if (error.name === 'TokenExpiredError') {
-      res.status(401).json({ 
+      res.status(StatusCodes.UNAUTHORIZED).json({ 
         success: false,
         message: 'Token has expired' 
       });
       return;
     }
 
-    res.status(403).json({ 
+    res.status(StatusCodes.UNAUTHORIZED).json({ 
       success: false,
       message: 'Invalid token' 
     });

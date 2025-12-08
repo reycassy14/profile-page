@@ -26,7 +26,6 @@ export const userSchema = new mongoose.Schema(
         password: { 
             type: String, 
             required: true,
-            minLength: [8, 'Password must have atleast 8 characters'],
             select: false
         },
         email: {
@@ -42,8 +41,8 @@ export const userSchema = new mongoose.Schema(
             default: ''
         },
         status: {
-            type: String, 
-            default: Object.values(STATUS.ACTIVE)
+            type: String,
+            default: STATUS.ACTIVE
         }
     },
     {

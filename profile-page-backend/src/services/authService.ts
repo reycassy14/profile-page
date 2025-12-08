@@ -49,12 +49,12 @@ class AuthService {
 
   // Login existing user
   async login(
-    email: string, 
+    username: string, 
     password: string
   ): Promise<{ user: Partial<IUser>; token: string }> {
     
     // Find user by email (include password field)
-    const user = await User.findOne({ email }).select('+password');
+    const user = await User.findOne({ username }).select('+password');
     
     if (!user) {
       throw new Error('Invalid email or password');
