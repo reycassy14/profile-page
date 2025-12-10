@@ -11,5 +11,6 @@ authRouter.post('/login', authController.login);
 
 // Protected route (authentication required)
 authRouter.get('/profile', authenticateToken, authController.getUserProfile);
+authRouter.get('/all-users', authController.getUsers);
 
 export default authRouter;

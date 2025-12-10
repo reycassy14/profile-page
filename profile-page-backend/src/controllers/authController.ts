@@ -6,7 +6,7 @@ import { StatusCodes } from 'http-status-codes'
 
 class AuthController {
     async register(req: Request, res: Response): Promise<void>{
-        const { email, password, username } = req.body as IUser
+        const { email, username, password } = req.body as IUser
 
         //const userEmail = await IUser.findOne({ email })
 
@@ -42,16 +42,25 @@ class AuthController {
     }
 
     async login(req:Request, res:Response): Promise<void>{
-        const {username, password} = req.body as IUser
+        const {email, username, password} = req.body as IUser
+        
         try {
-            if(!username || !password){
+            if(!username && !email ){
                  res.status(StatusCodes.BAD_REQUEST).json({
                     success: StatusCodes.BAD_REQUEST,
-                    message:'Password, Username Are Required!'
+                    message:'Username or email is Required!'
                 })
                 return
             }
-            const result = await authService.login(username ,password)
+            
+            if(!password){
+                 res.status(StatusCodes.BAD_REQUEST).json({
+                    success: StatusCodes.BAD_REQUEST,
+                    message:'password is Required!'
+                })
+                return
+            }
+            const result = await authService.login(email, username ,password)
             res.status(StatusCodes.OK).json({
                     success: StatusCodes.OK,
                     message: 'Successfully Login',
@@ -78,6 +87,21 @@ class AuthController {
                 })
         } catch (error: any) {
             res.status(StatusCodes.BAD_REQUEST).json({
+                success: StatusCodes.BAD_REQUEST,
+                message: error.message
+            })
+        }
+    }
+    async getUsers(req:Request, res: Response): Promise<void>{
+        try {
+            const data = await authService.getAllUsers()
+            res.status(StatusCodes.OK).json({
+                    success: StatusCodes.OK,
+                    message: 'Success',
+                    data: data
+                })
+        } catch (error: any) {
+             res.status(StatusCodes.BAD_REQUEST).json({
                 success: StatusCodes.BAD_REQUEST,
                 message: error.message
             })

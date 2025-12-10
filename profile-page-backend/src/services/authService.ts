@@ -12,24 +12,29 @@ class AuthService {
     );
   }
 
+  async getAllUsers(){
+    
+    return await User.find().sort({createdAt: -1}).lean()
+  }
+
   // Register new user
   async register(
     email: string,
-    password: string,
-    username: string
+    username: string,
+    password: string
   ): Promise<{ user: Partial<IUser>; token: string }> {
 
     // Check if user already exists
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ email, username });
     if (existingUser) {
-      throw new Error('User with this email already exists');
+      throw new Error('User with this email or username already exists');
     }
 
     // Create new user (password automatically hashed by pre-save hook)
     const user = await User.create({
       email,
-      password,
-      username
+      username,
+      password
     });
 
     // Generate token
@@ -49,28 +54,35 @@ class AuthService {
 
   // Login existing user
   async login(
-    username: string, 
+    email: string | undefined,
+    username: string | undefined, 
     password: string
   ): Promise<{ user: Partial<IUser>; token: string }> {
-    
-    // Find user by email (include password field)
-    const user = await User.findOne({ username }).select('+password');
+
+    const field = username ? "username" : "email"
+    const value = username ?? email
+
+    const user = await User.findOne({ [field]:value }).select('+password');
     
     if (!user) {
-      throw new Error('Invalid email or password');
+        console.log('User Data: ', user, value)
+      throw new Error(`Invalid User`);
+      
+    }
+    if (user) {
+        console.log('User Data: ', user, value)
     }
 
     // Verify password
     const isPasswordValid = await user.comparePassword(password);
     
     if (!isPasswordValid) {
-      throw new Error('Invalid email or password');
+      throw new Error('Invalid password');
     }
 
     // Generate token
     const token = this.generateToken(user._id.toString());
 
-    // Return user data (without password) and token
     return {
       user: {
         _id: user._id,

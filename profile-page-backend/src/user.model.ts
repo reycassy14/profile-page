@@ -3,10 +3,10 @@ import { STATUS } from "../src/services/constants"
 import bcrypt from 'bcryptjs'
 
 export interface IUser extends Document {
-    username: string,
+    username?: string,
     password: string,
-    email: string | null,
-    displayName?: string | null,
+    email?: string,
+    displayNameValue(displayName: string): string,
     status: string;
     comparePassword(userPassword: string): Promise<boolean>,
     createdAt: Date,
@@ -56,10 +56,16 @@ userSchema.pre('save', async function () {
   if (!this.isModified('password')) {
     return;
   }
-
+  if (!this.displayName) {
+      this.displayName = this.username;
+    }
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
+
+userSchema.methods.displayNameValue = async function (displayName:string): Promise<void> {
+return displayName = this.username;
+}
 
 // Method to compare password for login
 userSchema.methods.comparePassword = async function (userPassword: string): Promise<boolean> {
