@@ -59,18 +59,21 @@ class AuthService {
     password: string
   ): Promise<{ user: Partial<IUser>; token: string }> {
 
-    const field = username ? "username" : "email"
-    const value = username ?? email
+    let user
 
-    const user = await User.findOne({ [field]:value }).select('+password');
+    if(username){
+      user = await User.findOne({username}).select('+password')
+    } else if(email){
+      user = await User.findOne({email}).select('+password')
+    }
     
     if (!user) {
-        console.log('User Data: ', user, value)
+        console.log('User Data: ', user)
       throw new Error(`Invalid User`);
       
     }
     if (user) {
-        console.log('User Data: ', user, value)
+        console.log('User Data: ', user)
     }
 
     // Verify password
